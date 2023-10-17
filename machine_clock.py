@@ -2,10 +2,10 @@ import lvgl as lv
 import machine
 from machine import Pin,SoftI2C,PWM,I2S
 from ili9XXX import st7789
-import ft6x36_new as ft6x36
-import axp202c_new as axp202
+import ft6x36_2 as ft6x36
+import axp202c_2 as axp202
 import pcf8563
-import bma423_new as bma423
+import bma423_2 as bma423
 import time
 import esp32
 import fs_driver
@@ -22,7 +22,7 @@ I2S_BUFFER_LENGTH_IN_BYTES = 8000
 
 
 # ======= ALARM FILE CONFIGURATION =======
-ALARM_WAV_FILE = "short-alarm.wav"
+ALARM_WAV_FILE = "/snd/short-alarm.wav"
 ALARM_WAV_SAMPLE_SIZE_IN_BITS = 16
 ALARM_FORMAT = I2S.STEREO
 ALARM_SAMPLE_RATE_IN_HZ = 44100
@@ -175,11 +175,10 @@ class M_CLOCK:
                 
                 try:
                     self.wav = open(ALARM_WAV_FILE, "rb")
-                    self.pos = self.wav.seek(44)  # advance to first byte of Data section in WAV file
+                    self.pos = self.wav.seek(44)                # advance to first byte of Data section in WAV file
                 except:
                     print("alarm audio file read error")
-                print("play alarm")
-                self.count = 3
+                self.count = 3                                  #repeat counter for alarm sound
                 self.audio_out.irq(self.play_alarm_wav)         # i2s_callback is called when buf is emptied
                 self.audio_out.write(b'\x00' * 1024)
 
@@ -199,12 +198,11 @@ class M_CLOCK:
                 
     def play_alarm_wav(self, e):
             # allocate sample array
-            wav_samples = bytearray(230000)
+            wav_samples = bytearray(230000) #allocate 200k buffer
             wav_samples_mv = memoryview(wav_samples)
             num_read = self.wav.readinto(wav_samples_mv)
             # continuously read audio samples from the WAV file
             # and write them to an I2S DAC
-            print("{} {}".format(num_read,self.count))
             try:
                 # end of WAV file?
                 if num_read == 0:
@@ -219,7 +217,6 @@ class M_CLOCK:
                         self.audio_out.deinit()
                         self.axp.disablePower(axp202.AXP202_LDO4)
                 _ = self.audio_out.write(wav_samples_mv[:num_read])
-                    #num_read = self.wav.readinto(wav_samples_mv)
             except (KeyboardInterrupt, Exception) as e:
                 print("caught exception {} {}".format(type(e).__name__, e))
 

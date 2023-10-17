@@ -1,6 +1,6 @@
-##### startup script #####
-
-#!/opt/bin/lv_micropython -i
+###############################################################################
+#                       Simple Calculator App
+###############################################################################
 
 import lvgl as lv
 import fs_driver
@@ -25,9 +25,9 @@ class CALC_APP(object):
         style_ta.set_border_color(lv.color_black())
         self.ta = lv.textarea(screen)
         self.ta.set_one_line(True)
-        self.ta.set_size(100,60)
+        self.ta.set_size(100,50)
         self.ta.add_style(style_ta,0)
-        self.ta.align(lv.ALIGN.TOP_RIGHT, 0, 0)
+        self.ta.align(lv.ALIGN.TOP_RIGHT, 0, 5)
         self.ta.set_align(lv.TEXT_ALIGN.RIGHT)
 
         self.la = lv.label(screen)
@@ -42,7 +42,7 @@ class CALC_APP(object):
 
         fs_drv = lv.fs_drv_t()
         fs_driver.fs_register(fs_drv, 'S')
-        medula26 = lv.font_load("S:medula26.fnt")
+        medula26 = lv.font_load("S:/fonts/medula26.fnt")
         style.set_text_font(medula26)
         style.set_border_width(2)
         style.set_radius(10)
@@ -72,6 +72,12 @@ class CALC_APP(object):
         self.btnm.add_event(lambda e: self.btnm_event_handler(e, self.ta), lv.EVENT.CLICKED, None)
         self.btnm.clear_flag(lv.obj.FLAG.CLICK_FOCUSABLE)    # To keep the text area focused on button clicks
         self.btnm.set_map(btnm_map)
+        self.clock = lv.label(self.screen)
+        self.clock.set_text("00:00")
+        self.clock.align(lv.ALIGN.TOP_RIGHT, 0, -12)
+
+    def update_clock(self, hour, minute, second):
+        self.clock.set_text("{}:{}".format(hour,minute))
 
         
     def get_operator(self, num=1): #get  self.operator
@@ -242,5 +248,3 @@ class CALC_APP(object):
             #lv.event_send(ta, lv.EVENT.READY, None)
 
 
-#app = CALC_APP()
-#app.setup(lv.scr_act())

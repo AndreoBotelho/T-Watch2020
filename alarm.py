@@ -1,9 +1,9 @@
-##### startup script #####
-
-#!/opt/bin/lv_micropython -i
+##############################################################################
+#           Alarm APP
+##############################################################################
 
 import lvgl as lv
-import mClock
+import machine_clock
 import re
 
 ##### main script #####
@@ -48,6 +48,10 @@ class ALARM_APP(object):
         self.la = lv.label(screen)
         self.la.set_text("Alarm")
         self.la.align(lv.ALIGN.TOP_MID, 0, 10)
+        
+        self.clock = lv.label(screen)
+        self.clock.set_text("00:00")
+        self.clock.align(lv.ALIGN.TOP_RIGHT, 0, 0)
 
         self.la = lv.label(screen)
         self.la.set_text("Hour")
@@ -56,30 +60,25 @@ class ALARM_APP(object):
         self.la = lv.label(screen)
         self.la.set_text("Minutes")
         self.la.align_to(self.dd1, lv.ALIGN.OUT_TOP_MID, 0, -5)
-        
-#         alarm = mClock.clockref.rtc.get_alarm()
-#         print(alarm)
-#         if alarm is not None:
-#             self.cb.add_state(lv.STATE.CHECKED)
-#             self.dd.set_selected(alarm[1],lv.ANIM.OFF)
-#             self.dd1.set_selected(alarm[0],lv.ANIM.OFF)
-#             mClock.clockref.rtc.enable_alarm_interrupt()
-            
 
+    def update_clock(self, hour, minute, second):
+        self.clock.set_text("{}:{}".format(hour,minute))
+        
+        
     def event_handler(self, e):
         code = e.get_code()
         obj = e.get_target_obj()
         if code == lv.EVENT.VALUE_CHANGED:
             txt = obj.get_text()
             if obj.get_state() & lv.STATE.CHECKED:
-                if(mClock.clockref != None):
+                if(machine_clock.clockref != None):
                     hour = self.dd.get_selected()
                     minute =  self.dd1.get_selected()   
-                    mClock.clockref.rtc.set_daily_alarm(hours=hour, minutes=minute)
-                    mClock.clockref.rtc.enable_alarm_interrupt()
+                    machine_clock.clockref.rtc.set_daily_alarm(hours=hour, minutes=minute)
+                    machine_clock.clockref.rtc.enable_alarm_interrupt()
             else:
-                if(mClock.clockref != None):
-                    mClock.clockref.rtc.turn_alarm_off()
-                    mClock.clockref.rtc.disable_alarm_interrupt()
+                if(machine_clock.clockref != None):
+                    machine_clock.clockref.rtc.turn_alarm_off()
+                    machine_clock.clockref.rtc.disable_alarm_interrupt()
 
 

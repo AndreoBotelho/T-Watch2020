@@ -29,7 +29,7 @@ class CLOCK:
         fs_driver.fs_register(fs_drv, 'S')
 
         try:
-            self.bg_img.set_src('S:bgxp.png')
+            self.bg_img.set_src('S:/img/bgxp.png')
             self.bg_img.set_size(240, 240)
             self.bg_img.align(lv.ALIGN.CENTER, 0, 0)
             dsc = lv.snapshot_take(self.bg_img, lv.COLOR_FORMAT.NATIVE)
@@ -42,7 +42,7 @@ class CLOCK:
         try:
             self.style_second.set_text_font(lv.font_montserrat_34)
         except:
-            font_mexellent_3d_34 = lv.font_load("S:mexcellent.3d-34.fnt")
+            font_mexellent_3d_34 = lv.font_load("S:/fonts/mexcellent.3d-34.fnt")
             self.style_second.set_text_font(font_mexellent_3d_34)
         
         self.style_clock.init()
@@ -50,7 +50,7 @@ class CLOCK:
         try:
             self.style_clock.set_text_font(lv.font_montserrat_48)
         except:
-            font_mexellent_3d_72 = lv.font_load("S:mexcellent.3d.fnt")
+            font_mexellent_3d_72 = lv.font_load("S:/fonts/mexcellent.3d.fnt")
             self.style_clock.set_text_font(font_mexellent_3d_72)
 
         self.g_data.hour = lv.label(self.bg_img)
@@ -96,10 +96,13 @@ class CLOCK:
         self.g_data.battery.set_text(lv.SYMBOL.BATTERY_FULL);
 
         
-    def update_UI(self, hour, minute, second, battery, date, current):
+    def update_clock(self, hour, minute, second):
         self.g_data.second.set_text(second)
         self.g_data.minute.set_text(minute)
         self.g_data.hour.set_text(hour)
+
+    def update_UI(self, hour, minute, second, battery, date, current):
+        self.update_clock( hour, minute, second)
         self.g_data.battery.set_text(battery)
         self.g_data.date.set_text(date)
 

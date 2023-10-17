@@ -1,8 +1,11 @@
+##################################################################
+#         Init T_Watch Hardware to use LVGL examples
+##################################################################
 
 from ili9XXX import st7789
-from ft6x36_new import ft6x36
-import axp202c_new as axp202
-import bma423_new as bma423
+from ft6x36_2 import ft6x36
+import axp202c_2 as axp202
+import bma423_2 as bma423
 import time
 
 ##### main script #####
@@ -24,7 +27,7 @@ axp.enablePower(axp202.AXP202_LDO2)
 
 i2c0 = axp.bus 
 sensor = bma423.BMA423(i2c0)
-remap_data = ([1,1,0,1,2,1])
+remap_data = ([1,1,0,1,2,1]) #TWatch acell directions
 sensor.set_remap_axes(remap_data)
 sensor.accel_range=2 #2G
 sensor.accel_odf = 8 #100Hz

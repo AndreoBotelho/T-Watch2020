@@ -17,6 +17,14 @@
 # The number of presses is in touch.presses, touch.points[0] and points[1]
 # hold the positions. LVGL is not (yet) multi-touch, so all it sees is the
 # position in points[0].
+
+
+#############################################################################
+# V2 changes
+# * Added IRQ pin checking before read I2C bus
+# * Power mode options
+#############################################################################
+
 import lvgl as lv
 from machine import I2C, Pin
 

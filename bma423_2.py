@@ -838,7 +838,6 @@ class BMA4:
     @accel_odf.setter 
     def accel_perf(self,val):
        val = (val & 0x1) << 7
-       print(str(val))
        tmp=self.read_byte(BMA4_ACCEL_CONFIG_ADDR)
        tmp |= val
        self.write_byte(BMA4_ACCEL_CONFIG_ADDR,tmp)

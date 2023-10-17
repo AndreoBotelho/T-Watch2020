@@ -325,43 +325,7 @@ class AdvancedDemoApplication:
         # Initialize ILI9341 display
 
         import lvgl as lv
-        from machine import Pin,I2C
-        from ili9XXX import st7789
-        from ft6x36 import ft6x36
-
-        import axp202c_new as axp202c
-
-        # init power manager, set backlight
-        axp = axp202c.PMU()
-        self.i2c1 = I2C(1,scl=Pin(32), sda=Pin(23))
-        #axp.enablePower(axp202c.AXP202_LDO2)
-        #axp.setLDO2Voltage(2800)
-
-        # init display
-        self.disp = st7789(
-            mosi=19, clk=18, cs=5, dc=27, rst=-1, backlight=15, power=-1,
-            width=240, height=240, rot=2, factor=4)
-        
-        touch=ft6x36(0, 23, 32, 10000,width=240, height=240,inv_x=True, inv_y=True)
-
-        # self.disp = ili9341(dc=32, cs=33, power=-1, backlight=-1)
-        #elf.disp = ili9341(mhz=20, dc=32, cs=33, power=-1, backlight=-1, hybrid=False, factor=8)
-
-
-        # Register raw resistive touch driver
-
-        """
-        import rtch
-        self.touch = rtch.touch(xp = 32, yp = 33, xm = 25, ym = 26, touch_rail = 27, touch_sense = 33)
-        self.touch.init()
-        self.indev_drv = lv.indev_create()
-        self.indev_drv.set_type(lv.INDEV_TYPE.POINTER)
-        self.indev_drv.set_read_cb(self.touch.read)
-        """
-
-        # Register xpt2046 touch driver
-
-        #from xpt2046 import xpt2046
+        import display_driver
 
 
     def init_gui_stm32(self):
